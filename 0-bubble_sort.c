@@ -28,18 +28,17 @@ void bubble_sort(int *array, size_t size)
 		}
 	}
 }
-
-/*
- * swap_array_element - swaps two elements of @array
+/**
+ * swap_array_element - swaps two elements of an array
  *
- * @m: first element
- * @n: second element
+ * @m: the first pointer
+ * @n: the second pointer
  */
 void swap_array_element(int *m, int *n)
 {
-	int o = 0;
+	int tmp;
 
-	o = *m;
+	tmp = *m;
 	*m = *n;
-	*n = o;
+	*n = tmp;
 }
