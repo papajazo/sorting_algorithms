@@ -1,57 +1,50 @@
 #include "sort.h"
 
+void swap_node(listint_t **h, listint_t **n1, listint_t *n2);
+
 /**
- * insertion_sort_list - sorts a doubly linked list of integers in ascending order
- * @list: list of integers
+ * swap_node - swaps two nodes in a listint_t doubly-linked list.
+ * @h: A pointer to the head of the doubly-linked list.
+ * @n1: A pointer to the first node to swap.
+ * @n2: The second node to swap.
+ */
+void swap_node(listint_t **h, listint_t **n1, listint_t *n2)
+{
+	(*n1)->next = n2->next;
+	if (n2->next != NULL)
+		n2->next->prev = *n1;
+	n2->prev = (*n1)->prev;
+	n2->next = *n1;
+	if ((*n1)->prev != NULL)
+		(*n1)->prev->next = n2;
+	else
+		*h = n2;
+	(*n1)->prev = n2;
+	*n1 = n2->prev;
+}
+
+/**
+ * insertion_sort_list - Sorts a doubly linked list of integers
+ *                       using the insertion sort algorithm.
+ * @list: A pointer to the head of a doubly-linked list of integers.
+ *
+ * Description: Prints the list after each swap.
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *temp = NULL;
-	listint_t *n = NULL;
+	listint_t *iter, *insert, *tmp;
 
-	if (!list || *list || list_len(*list) < 2)
+	if (list == NULL || *list == NULL || (*list)->next == NULL)
 		return;
 
-	temp = (*list)->next;
-
-	while (temp)
+	for (iter = (*list)->next; iter != NULL; iter = tmp)
 	{
-		n = temp->next;
-		while (temp->prev && temp->n > temp->n)
+		tmp = iter->next;
+		insert = iter->prev;
+		while (insert != NULL && iter->n < insert->n)
 		{
-			temp->prev->next = temp->next;
-			if (temp->next)
-			{
-				temp->next->prev = temp->prev;
-			}
-
-			temp->next = temp->prev;
-			temp->prev = temp->next->prev;
-			temp->next->prev = temp;
-
-			if (!temp->prev)
-				*list = temp;
-
-			if (!temp->prev)
-				temp->prev->next = temp;
+			swap_node(list, &insert, iter);
+			print_list((const listint_t *)*list);
 		}
-		temp = n;
 	}
-}
-/**
- * list_len - returns the length of list
- * @h: pointer to the list
- *
- * Return: list length
- */
-int list_len(listint_t *h)
-{
-	int listlen = 0;
-
-	while (h)
-	{
-		listlen++;
-		h = h->next;
-	}
-	return (listlen);
 }
